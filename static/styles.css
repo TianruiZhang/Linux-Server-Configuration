@@ -13,16 +13,24 @@
 
 li {
   list-style-type: none;
+  margin: 10px 0;
 }
 
 .login {
   font-size: 1em;
   height: 2em;
   width: 4em;
-  display: table;
   background-color: white;
   border: 2px solid #f44336;
-  margin: auto;
+  display: block;
+  margin-left: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 0;
+}
+
+.brand {
+  margin-top: auto;
 }
 
 .login:hover {
