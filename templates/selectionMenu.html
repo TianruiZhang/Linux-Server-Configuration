@@ -1,6 +1,6 @@
 <html>
 <head>
-  <link rel="stylesheet" type=text/css href="{{url_for('static', filename='styles.css')}}">
+  <link rel="stylesheet" type=text/css href="{{url_for('static', filename='style.css')}}">
 </head>
 <div class="grid_container">
 <h1 class="brand">Annapolis Gourmet</h1>
@@ -15,7 +15,7 @@
   <div class="latest_items">
     <h2>Latest Items</h2>
     {% for item in items %}
-    <li>{{item[0]}}<span class="source"> ({{item[1]}})</span></li>
+    <li>{{item.name}}</li>
     {% endfor %}
   </div>
 </body>
