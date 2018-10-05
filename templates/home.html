@@ -1,0 +1,23 @@
+<html>
+<head>
+  <link rel="stylesheet" type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+<div class="grid_container">
+<h1 class="brand">Annapolis Gourmet</h1>
+<button type="button" class="login">Login</button>
+<body>
+  <div class="selections">
+    <h2>Selections</h2>
+    {% for selection in selections %}
+    <li>{{selection.name}}</li>
+    {% endfor %}
+  </div>
+  <div class="latest_items">
+    <h2>Latest Items</h2>
+    {% for item in items %}
+    <li>{{item.name}}</li>
+    {% endfor %}
+  </div>
+</body>
+</div>
+</html>

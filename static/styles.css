@@ -1,0 +1,45 @@
+.grid_container {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "selections items";
+  grid-auto-columns: 1fr 1fr;
+  grid-template-rows: 1fr 3fr;
+  grid-row-gap: 2em;
+  align-self: center;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.item_container {
+  display: grid;
+  grid-template-areas:
+    "header button"
+    "selections";
+  grid-auto-columns: 1fr 1fr;
+  grid-template-rows: 1fr 3fr;
+  grid-row-gap: 2em;
+  align-self: center;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+
+li {
+  list-style-type: none;
+}
+
+.login {
+  font-size: 1em;
+  height: 2em;
+  width: 4em;
+  display: table;
+  background-color: white;
+  border: 2px solid #f44336;
+  margin: auto;
+}
+
+.login:hover {
+  background-color: #f44336;
+  color: white;
+}
