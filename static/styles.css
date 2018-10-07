@@ -1,14 +1,28 @@
 .grid_container {
   display: grid;
   grid-template-areas:
-    "header header"
-    "selections items";
+    "brand login"
+    "title items";
   grid-auto-columns: 1fr 1fr;
-  grid-template-rows: 1fr 3fr;
   grid-row-gap: 2em;
-  align-self: center;
   margin-left: 10%;
   margin-right: 10%;
+}
+
+.details {
+  display: grid;
+  grid-template-areas:
+    "brand login"
+    "title title"
+    "description description";
+  grid-auto-columns: 1fr 1fr;
+  grid-row-gap: 2em;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+div {
+  border: 1px solid black;
 }
 
 li {
@@ -24,13 +38,15 @@ li {
   border: 2px solid #f44336;
   display: block;
   margin-left: auto;
-  margin-top: auto;
+  margin-top: 0;
   margin-bottom: auto;
   margin-right: 0;
+  grid-area: login;
 }
 
 .brand {
-  margin-top: auto;
+  margin-top: 0;
+  grid-area: brand;
 }
 
 .login:hover {
@@ -41,4 +57,20 @@ li {
 .source {
   color: gray;
   font-style: italic;
+}
+
+.selections {
+  grid-area: title;
+}
+
+.latest_items {
+  grid-area: items;
+}
+
+.title {
+  grid-area: title;
+}
+
+.description {
+  grid-area: description;
 }
