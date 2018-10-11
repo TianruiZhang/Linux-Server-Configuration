@@ -1,0 +1,20 @@
+<html>
+<head>
+  <link rel="stylesheet" type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+<div class="modify_menu">
+<h1 class="brand">Annapolis Gourmet</h1>
+<button type="button" class="login">Login</button>
+<body>
+  <div>
+    <h2 class="title">Delete Item</h2>
+    <p> Are you sure you want to delete {{item.name}}? </p>
+    <form action="{{url_for('deleteMenuItem', selection_id=item.selection_id, menu_id=item.id)}}" method="post">
+    </br>
+    <input type="submit" value="Yes">
+    <a href="{{url_for('menuDetails', selection_id=item.selection_id, menu_id=item.id)}}">No</a>
+    </form>
+  </div>
+</body>
+</div>
+</html>

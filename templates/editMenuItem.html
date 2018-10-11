@@ -10,7 +10,7 @@
     <h2 class="title">Edit Item</h2>
   </div>
   <div>
-    <form class="questions" action="{{url_for('editMenuItem', selection_id=selection_id, menu_id=item.id)}}" method="POST">
+    <form class="questions" action="{{url_for('editMenuItem', selection_id=selection_id, menu_id=item.id)}}" method="post">
       <p>Name</p>
       <input type="text" size="30" name="name" placeholder="{{item.name}}">
       <p>Price</p>

@@ -165,6 +165,16 @@ def editMenuItem(selection_id, menu_id):
                                 menu_id=menu_id, \
                                 item = editedItem)
 
+@app.route("/selection/<int:selection_id>/<int:menu_id>/delete/", methods=["GET", "POST"])
+def deleteMenuItem(selection_id, menu_id):
+    itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+    if request.method == "POST":
+        session.delete(itemToDelete)
+        session.commit()
+        return redirect(url_for("selectionMenu", selection_id=selection_id))
+    else:
+        return render_template("deleteMenuItem.html", item=itemToDelete)
+
 if __name__ == "__main__":
     app.secret_key = "super_secret_key"
     app.debug = True
