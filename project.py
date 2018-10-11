@@ -141,6 +141,30 @@ def newMenuItem():
     else:
         return render_template("newMenuItem.html", selections=selections)
 
+@app.route("/selection/<int:selection_id>/<int:menu_id>/edit/", \
+            methods=["GET", "POST"])
+def editMenuItem(selection_id, menu_id):
+    selections = session.query(Selection).all()
+    editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    if request.method == "POST":
+        if request.form["name"]:
+            editedItem.name = request.form["name"]
+        if request.form["price"]:
+            editedItem.price = request.form["price"]
+        if request.form["description"]:
+            editedItem.description = request.form["description"]
+        if request.form.get("comp_select"):
+            editedItem.selection_id = request.form.get("comp_select")
+        session.add(editedItem)
+        session.commit()
+        return redirect(url_for("selectionMenu", selection_id=selection_id))
+    else:
+        return render_template("editMenuItem.html", \
+                                selections=selections, \
+                                selection_id=selection_id, \
+                                menu_id=menu_id, \
+                                item = editedItem)
+
 if __name__ == "__main__":
     app.secret_key = "super_secret_key"
     app.debug = True

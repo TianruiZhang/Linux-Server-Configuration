@@ -21,7 +21,7 @@
   margin-right: 10%;
 }
 
-.edit_menu {
+.modify_menu {
   display: grid;
   grid-template-areas:
     "brand login"

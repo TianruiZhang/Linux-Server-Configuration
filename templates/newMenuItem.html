@@ -2,7 +2,7 @@
 <head>
   <link rel="stylesheet" type=text/css href="{{url_for('static', filename='styles.css')}}">
 </head>
-<div class="edit_menu">
+<div class="modify_menu">
 <h1 class="brand">Annapolis Gourmet</h1>
 <button type="button" class="login">Login</button>
 <body>
@@ -10,7 +10,7 @@
     <h2 class="title">Create Item</h2>
   </div>
   <div>
-    <form class="questions" action="{{url_for('newMenuItem')}}", method="POST">
+    <form class="questions" action="{{url_for('newMenuItem')}}" method="POST">
       <p>Name</p>
       <input type="text" size="30" name="name">
       <p>Price</p>
@@ -23,6 +23,9 @@
         <option value="{{selection.id}}">{{selection.name}}</option>
         {% endfor %}
       </select>
+      </br>
+      </br>
+      </br>
       <input type="submit" value="Create">
     </form>
   </div>
