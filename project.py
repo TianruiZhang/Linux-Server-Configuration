@@ -19,6 +19,17 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+@app.route("/selections/<int:selection_id>/menu/JSON/")
+def selectionMenuJSON(selection_id):
+    selection = session.query(Selection).filter_by(id=selection_id).one()
+    items = session.query(MenuItem).filter_by(selection_id=selection_id).all()
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+@app.route("/selections/<int:selection_id>/menu/<int:menu_id>/JSON/")
+def menuItemJSON(selection_id, menu_id):
+    menuItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItem=menuItem.serialize)
+
 @app.route("/login")
 def showLogin():
     state = "".join(random.choice(string.ascii_uppercase + string.digits) \
