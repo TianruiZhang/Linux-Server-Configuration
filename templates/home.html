@@ -13,7 +13,7 @@
     {% endfor %}
   </div>
   <div class="latest_items">
-    <h2>Latest Items</h2>
+    <h2>Latest Items <a href="{{url_for('newMenuItem')}}">(Add Item)</a></h2>
     {% for item in items %}
     <li>{{item[0]}}<span class="source"> ({{item[1]}})</span></li>
     {% endfor %}

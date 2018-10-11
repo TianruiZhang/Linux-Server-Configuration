@@ -1,0 +1,31 @@
+<html>
+<head>
+  <link rel="stylesheet" type=text/css href="{{url_for('static', filename='styles.css')}}">
+</head>
+<div class="edit_menu">
+<h1 class="brand">Annapolis Gourmet</h1>
+<button type="button" class="login">Login</button>
+<body>
+  <div>
+    <h2 class="title">Create Item</h2>
+  </div>
+  <div>
+    <form class="questions" action="{{url_for('newMenuItem')}}", method="POST">
+      <p>Name</p>
+      <input type="text" size="30" name="name">
+      <p>Price</p>
+      <input type="text" size="30" name="price">
+      <p>Description</p>
+      <textarea cols="40" rows="10" name="description"></textarea>
+      <p>Selection</p>
+      <select name="comp_select">
+        {% for selection in selections %}
+        <option value="{{selection.id}}">{{selection.name}}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Create">
+    </form>
+  </div>
+</body>
+</div>
+</html>

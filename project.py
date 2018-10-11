@@ -109,7 +109,7 @@ def homepage():
     selections = session.query(Selection).all()
     items = (session.query(MenuItem.name, Selection.name)).\
         join(Selection, MenuItem.selection_id == Selection.id).\
-        order_by(MenuItem.time_created.desc()).limit(5).all()
+        order_by(MenuItem.id.desc()).filter(MenuItem.id > 43).all()
     return render_template("home.html", selections=selections, items=items)
 
 @app.route("/selections/<int:selection_id>/")
@@ -126,6 +126,20 @@ def menuDetails(selection_id, menu_id):
         filter(and_(MenuItem.selection_id == selection_id, \
         MenuItem.id == menu_id)).one()
     return render_template("details.html", item=item)
+
+@app.route("/new/", methods=["GET", "POST"])
+def newMenuItem():
+    selections = session.query(Selection).all()
+    if request.method == "POST":
+        newItem = MenuItem(name=request.form["name"], \
+                           price=request.form["price"], \
+                           description=request.form["description"], \
+                           selection_id=request.form.get("comp_select"))
+        session.add(newItem)
+        session.commit()
+        return redirect(url_for("homepage"))
+    else:
+        return render_template("newMenuItem.html", selections=selections)
 
 if __name__ == "__main__":
     app.secret_key = "super_secret_key"

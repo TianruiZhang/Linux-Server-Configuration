@@ -21,6 +21,18 @@
   margin-right: 10%;
 }
 
+.edit_menu {
+  display: grid;
+  grid-template-areas:
+    "brand login"
+    "title title"
+    "questions questions";
+  grid-auto-columns: 1fr 1fr;
+  grid-row-gap: 2em;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
 div {
   border: 1px solid black;
 }

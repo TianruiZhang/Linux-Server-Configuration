@@ -28,7 +28,6 @@ class MenuItem(Base):
     description = Column(String(500))
     price = Column(String(8))
     selection_id = Column(Integer, ForeignKey("selection.id"))
-    time_created = Column(DateTime(timezone=True), server_default=func.now())
     selection = relationship(Selection)
     @property
     def serialize(self):
