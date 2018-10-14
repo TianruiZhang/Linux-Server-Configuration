@@ -1,7 +1,7 @@
 .grid_container {
   display: grid;
   grid-template-areas:
-    "brand login"
+    "brand button"
     "title items";
   grid-auto-columns: 1fr 1fr;
   grid-row-gap: 2em;
@@ -12,9 +12,10 @@
 .details {
   display: grid;
   grid-template-areas:
-    "brand login"
+    "brand button"
     "title title"
-    "description description";
+    "description description"
+    "edit_delete edit_delete";
   grid-auto-columns: 1fr 1fr;
   grid-row-gap: 2em;
   margin-left: 10%;
@@ -24,13 +25,28 @@
 .modify_menu {
   display: grid;
   grid-template-areas:
-    "brand login"
+    "brand button"
     "title title"
     "questions questions";
   grid-auto-columns: 1fr 1fr;
   grid-row-gap: 2em;
   margin-left: 10%;
   margin-right: 10%;
+}
+
+#signinContainer {
+  display: grid;
+  grid-template-areas:
+    "welcome welcome"
+    "googleSignin fbSignin";
+  grid-row-gap: 2em;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 10%;
+}
+
+#googleSignin {
+  margin: auto;
 }
 
 div {
@@ -42,7 +58,7 @@ li {
   margin: 10px 0;
 }
 
-.login {
+button {
   font-size: 1em;
   height: 2em;
   width: 4em;
@@ -53,7 +69,7 @@ li {
   margin-top: 0;
   margin-bottom: auto;
   margin-right: 0;
-  grid-area: login;
+  grid-area: button;
 }
 
 .brand {
@@ -61,7 +77,7 @@ li {
   grid-area: brand;
 }
 
-.login:hover {
+button: hover {
   background-color: #f44336;
   color: white;
 }
@@ -85,4 +101,16 @@ li {
 
 .description {
   grid-area: description;
+}
+
+.welcome {
+  grid-area: welcome;
+}
+
+.googleSignin {
+  grid-area: googleSignin;
+}
+
+.edit_delete {
+  grid-area: edit_delete;
 }

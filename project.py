@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect,\
                     url_for, flash, jsonify, make_response
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Selection, MenuItem
+from database_setup import Base, Selection, MenuItem, User
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError, \
     AccessTokenCredentials
@@ -36,6 +36,26 @@ def showLogin():
         for i in range(32))
     login_session["state"] = state
     return render_template("login.html", STATE=state)
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+def createUser(login_session):
+    newUser = User(name=login_session["username"], \
+                   email=login_session["email"], \
+                   picture=login_session["picture"])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session["email"]).one()
+    return user.id
 
 @app.route("/gconnect", methods=["POST"])
 def gconnect():
@@ -79,6 +99,10 @@ def gconnect():
     login_session["username"] = data["name"]
     login_session["picture"] = data["picture"]
     login_session["email"] = data["email"]
+    user_id = getUserID(login_session["email"])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session["user_id"] = user_id
     output = ""
     output += "<h1>Welcome, "
     output += login_session["username"]
@@ -108,20 +132,27 @@ def gdisconnect():
         del login_session["picture"]
         response = make_response(json.dumps("Successfully disconnected."), 200)
         response.headers["Content-Type"] = "application/json"
-        return response
+        return redirect("/home")
     else:
         response = make_response(json.dumps("Failed to revoke token for the given user."), 400)
         response.headers["Content-Type"] = "application/json"
-        return response
+        return redirect("/home")
 
 @app.route("/")
 @app.route("/home/")
 def homepage():
     selections = session.query(Selection).all()
+    selection = session.query(Selection).first()
+    creator = getUserInfo(selection.user_id)
     items = (session.query(MenuItem.name, Selection.name)).\
         join(Selection, MenuItem.selection_id == Selection.id).\
         order_by(MenuItem.id.desc()).filter(MenuItem.id > 43).all()
-    return render_template("home.html", selections=selections, items=items)
+    if "username" not in login_session or creator.id != login_session["user_id"]:
+        return render_template("publicHome.html", selections=selections,\
+                                creator=creator, items=items)
+    else:
+        return render_template("home.html", selections=selections, \
+                                items=items, creator=creator)
 
 @app.route("/selections/<int:selection_id>/")
 def selectionMenu(selection_id):
@@ -136,16 +167,23 @@ def menuDetails(selection_id, menu_id):
     item = session.query(MenuItem).\
         filter(and_(MenuItem.selection_id == selection_id, \
         MenuItem.id == menu_id)).one()
-    return render_template("details.html", item=item)
+    creator = getUserInfo(item.user_id)
+    if "username" not in login_session or creator.id != login_session["user_id"]:
+        return render_template("publicDetails.html", item=item)
+    else:
+        return render_template("details.html", item=item)
 
 @app.route("/new/", methods=["GET", "POST"])
 def newMenuItem():
     selections = session.query(Selection).all()
+    if "username" not in login_session:
+        return redirect("/login")
     if request.method == "POST":
         newItem = MenuItem(name=request.form["name"], \
                            price=request.form["price"], \
                            description=request.form["description"], \
-                           selection_id=request.form.get("comp_select"))
+                           selection_id=request.form.get("comp_select"), \
+                           user_id=login_session["user_id"])
         session.add(newItem)
         session.commit()
         return redirect(url_for("homepage"))
@@ -157,6 +195,10 @@ def newMenuItem():
 def editMenuItem(selection_id, menu_id):
     selections = session.query(Selection).all()
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
+    if "username" not in login_session:
+        return redirect("/login")
+    if editedItem.user_id != login_session["user_id"]:
+        return "<script>function myFunction() {alert('You are not authorized to edit this menu item. You can only edit menu items that you created.');}</script><body onload='myFunction()'>"
     if request.method == "POST":
         if request.form["name"]:
             editedItem.name = request.form["name"]
@@ -179,6 +221,10 @@ def editMenuItem(selection_id, menu_id):
 @app.route("/selection/<int:selection_id>/<int:menu_id>/delete/", methods=["GET", "POST"])
 def deleteMenuItem(selection_id, menu_id):
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
+    if "username" not in login_session:
+        return redirect("/login")
+    if itemToDelete.user_id != login_session["user_id"]:
+        return "<script>function myFunction() {alert('You are not authorized to delete this menu item. You can only delete menu items that you created.');}</script><body onload='myFunction()'>"
     if request.method == "POST":
         session.delete(itemToDelete)
         session.commit()

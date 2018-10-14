@@ -4,7 +4,7 @@
 </head>
 <div class="grid_container">
 <h1 class="brand">Annapolis Gourmet</h1>
-<button type="button" class="home"><a href="{{url_for('homepage')}}">Home</a></button>
+<button type="button" class="login"><a href="{{url_for('showLogin')}}">Login</a></button>
 <body>
   <div class="selections">
     <h2>Selections</h2>
@@ -13,9 +13,9 @@
     {% endfor %}
   </div>
   <div class="latest_items">
-    <h2>{{selection.name}}</h2>
+    <h2>Latest Items</h2>
     {% for item in items %}
-    <li><a href="{{url_for('menuDetails', selection_id=selection.id, menu_id=item.id)}}">{{item.name}}</a></li>
+    <li>{{item[0]}}<span class="source"> ({{item[1]}})</span></li>
     {% endfor %}
   </div>
 </body>

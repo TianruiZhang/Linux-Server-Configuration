@@ -9,10 +9,20 @@ from sqlalchemy.sql import func
 Base = declarative_base()
 
 
+class User(Base):
+    __tablename__ = "user"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250))
+
 class Selection(Base):
     __tablename__ = "selection"
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship(User)
+
     @property
     def serialize(self):
         return {
@@ -29,6 +39,8 @@ class MenuItem(Base):
     price = Column(String(8))
     selection_id = Column(Integer, ForeignKey("selection.id"))
     selection = relationship(Selection)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    user = relationship(User)
     @property
     def serialize(self):
         return {
