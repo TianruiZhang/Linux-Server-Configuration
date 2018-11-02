@@ -191,8 +191,8 @@ def gconnect():
     return output
 
 
-@app.route("/gdisconnect")
-def gdisconnect():
+@app.route("/logout")
+def logout():
     """
     Disconnect a user from the login session.
     Args:

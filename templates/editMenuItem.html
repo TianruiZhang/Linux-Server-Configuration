@@ -12,11 +12,11 @@
   <div>
     <form class="questions" action="{{url_for('editMenuItem', selection_id=selection_id, menu_id=item.id)}}" method="post">
       <p>Name</p>
-      <input type="text" size="30" name="name" placeholder="{{item.name}}">
+      <input type="text" size="30" name="name" placeholder="{{item.name}}" required>
       <p>Price</p>
-      <input type="text" size="30" name="price" placeholder="{{item.price}}">
+      <input type="text" size="30" name="price" placeholder="{{item.price}}" required pattern="\$[0-9]+(\\.[0-9][0-9]?)?">
       <p>Description</p>
-      <textarea cols="40" rows="10" name="description" placeholder="{{item.description}}"></textarea>
+      <textarea cols="40" rows="10" name="description" placeholder="{{item.description}}" required></textarea>
       <p>Selection</p>
       <select name="comp_select" placeholder="{{item.selection_id}}">
         {% for selection in selections %}

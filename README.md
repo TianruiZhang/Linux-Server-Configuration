@@ -14,3 +14,4 @@ This is a web-application project that integrates Flask, CRUD and authentication
 9. Type `python3 lotsofmenus.py` and press **Enter**.
 10. Type `python3 project.py` and press **Enter**.
 11. Type `http://localhost:8000/home/` in the address bar in your browser.
+12. You can view selections and menu items that have already been stored in the database by the developer. However, you need to log in first to create, edit or delete a menu item.

@@ -114,3 +114,11 @@ button: hover {
 .edit_delete {
   grid-area: edit_delete;
 }
+
+input:invalid {
+  box-shadow: 0 0 5px 1px red;
+}
+
+textarea:invalid {
+  box-shadow: 0 0 5px 1px red;
+}
