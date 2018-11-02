@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-import os, sys
-from sqlalchemy import create_engine, Column, ForeignKey, Integer, String, DateTime
+import os
+import sys
+from sqlalchemy import create_engine, Column, \
+    ForeignKey, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -15,6 +17,7 @@ class User(Base):
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=False)
     picture = Column(String(250))
+
 
 class Selection(Base):
     __tablename__ = "selection"
@@ -41,6 +44,7 @@ class MenuItem(Base):
     selection = relationship(Selection)
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship(User)
+
     @property
     def serialize(self):
         return {

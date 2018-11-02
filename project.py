@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 from flask import Flask, render_template, request, redirect,\
-                    url_for, flash, jsonify, make_response
+                    g, url_for, flash, jsonify, make_response
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Selection, MenuItem, User
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError, \
     AccessTokenCredentials
+from sqlalchemy.orm.exc import NoResultFound
+from functools import wraps
 import random
 import string
 import httplib2
@@ -55,6 +57,14 @@ def menuItemJSON(selection_id, menu_id):
     return jsonify(MenuItem=menuItem.serialize)
 
 
+@app.errorhandler(NoResultFound)
+def page_not_found(e):
+    """
+    Implement a "404 Page Not Found" Exception.
+    """
+    return render_template("404.html"), 404
+
+
 @app.route("/login")
 def showLogin():
     """
@@ -70,6 +80,15 @@ def showLogin():
                 for i in range(32))
     login_session["state"] = state
     return render_template("login.html", STATE=state)
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "username" not in login_session:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 def getUserID(email):
@@ -179,16 +198,12 @@ def gconnect():
     if not user_id:
         user_id = createUser(login_session)
     login_session["user_id"] = user_id
-    output = ""
-    output += "<h1>Welcome, "
-    output += login_session["username"]
-    output += "!</h1>"
-    output += "<img src='"
-    output += login_session["picture"]
-    output += " style='width: 300px; height: 300px; border-radius: 150px;"\
-        " -webkit-border-radius: 150px; -moz-border-radius: 150px;'>"
     flash("you are now logged in as {}".format(login_session["username"]))
-    return output
+    return render_template(
+        "login_success.html",
+        username=login_session["username"],
+        picture=login_session["picture"]
+        )
 
 
 @app.route("/logout")
@@ -312,6 +327,7 @@ def menuDetails(selection_id, menu_id):
 
 
 @app.route("/new/", methods=["GET", "POST"])
+@login_required
 def newMenuItem():
     """
     Create a new menu item.
@@ -322,8 +338,6 @@ def newMenuItem():
         menu item.
     """
     selections = session.query(Selection).all()
-    if "username" not in login_session:
-        return redirect("/login")
     if request.method == "POST":
         newItem = MenuItem(
             name=request.form["name"],
@@ -343,6 +357,7 @@ def newMenuItem():
     "/selection/<int:selection_id>/<int:menu_id>/edit/",
     methods=["GET", "POST"]
     )
+@login_required
 def editMenuItem(selection_id, menu_id):
     """
     Edit an arbitrary menu item of an arbitrary selection.
@@ -355,8 +370,6 @@ def editMenuItem(selection_id, menu_id):
     """
     selections = session.query(Selection).all()
     editedItem = session.query(MenuItem).filter_by(id=menu_id).one()
-    if "username" not in login_session:
-        return redirect("/login")
     if editedItem.user_id != login_session["user_id"]:
         return (
             "<script>function myFunction() "
@@ -390,6 +403,7 @@ def editMenuItem(selection_id, menu_id):
     "/selection/<int:selection_id>/<int:menu_id>/delete/",
     methods=["GET", "POST"]
     )
+@login_required
 def deleteMenuItem(selection_id, menu_id):
     """
     Delete an arbitrary menu item of an arbitrary selection.
@@ -401,8 +415,6 @@ def deleteMenuItem(selection_id, menu_id):
         of an arbitrary selection.
     """
     itemToDelete = session.query(MenuItem).filter_by(id=menu_id).one()
-    if "username" not in login_session:
-        return redirect("/login")
     if itemToDelete.user_id != login_session["user_id"]:
         return (
             "<script>function myFunction() "
