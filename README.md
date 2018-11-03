@@ -12,8 +12,6 @@ This is a web-application project that integrates Flask, CRUD and authentication
 7. Type `git clone https://github.com/TianruiZhang/Annapolis-Gourmet.git` and press **Enter**. Your local clone will be created.
 8. Change to the project directory by running `cd Annapolis-Gourmet/`. 
 9. Type `pip3 install -r requirements.txt --user` and press **Enter**.
-10. Type `python3 database_setup.py` and press **Enter**.
-11. Type `python3 lotsofmenus.py` and press **Enter**.
-12. Type `python3 project.py` and press **Enter**.
-13. Type `http://localhost:8000/home/` in the address bar in your browser.
-14. You can view selections and menu items that have already been stored in the database by the developer. However, you need to log in first to create, edit or delete a menu item.
+10. Type `python3 project.py` and press **Enter**.
+11. Type `http://localhost:8000/home/` in the address bar in your browser.
+12. You can view selections and menu items that have already been stored in the database by the developer. However, you need to log in first to create, edit or delete a menu item.
