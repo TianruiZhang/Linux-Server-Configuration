@@ -263,14 +263,13 @@ def homepage():
     items = (session.query(MenuItem.name, Selection.name)).\
         join(Selection, MenuItem.selection_id == Selection.id).\
         order_by(MenuItem.id.desc()).filter(MenuItem.id > 43).all()
-    if ("username" not in login_session or
-            creator.id != login_session["user_id"]):
-                return render_template(
-                    "publicHome.html",
-                    selections=selections,
-                    creator=creator,
-                    items=items
-                    )
+    if "username" not in login_session:
+        return render_template(
+            "publicHome.html",
+            selections=selections,
+            creator=creator,
+            items=items
+            )
     else:
         return render_template(
             "home.html",
@@ -319,9 +318,8 @@ def menuDetails(selection_id, menu_id):
             )
         ).one()
     creator = getUserInfo(item.user_id)
-    if ("username" not in login_session or
-            creator.id != login_session["user_id"]):
-            return render_template("publicDetails.html", item=item)
+    if "username" not in login_session:
+        return render_template("publicDetails.html", item=item)
     else:
         return render_template("details.html", item=item)
 
