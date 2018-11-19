@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Selection, MenuItem, User
 
-engine = create_engine("sqlite:///menu.db")
+engine = create_engine("postgresql://catalog:catalog@localhost/catalog")
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
